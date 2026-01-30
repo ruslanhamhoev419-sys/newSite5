@@ -71,3 +71,25 @@ function checkReminders() {
 
 // запускаем проверку сразу при загрузке
 checkReminders();
+function checkAuthUI() {
+  const isAuth = localStorage.getItem('isAuth');
+  const authBtn = document.getElementById('authBtn');
+
+  if (!authBtn) return;
+
+  if (isAuth) {
+    authBtn.textContent = 'Выйти';
+    authBtn.onclick = () => {
+      localStorage.removeItem('isAuth');
+      localStorage.removeItem('userEmail');
+      location.reload();
+    };
+  } else {
+    authBtn.textContent = 'Регистрация';
+    authBtn.onclick = () => {
+      location.href = 'auth.html';
+    };
+  }
+}
+
+checkAuthUI();

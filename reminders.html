@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+ 
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Напоминания — антиХаос подписок</title>
@@ -87,6 +89,113 @@ if(subs.length){
   });
 }
 </script>
+if (!localStorage.getItem('isAuth')) {
+  location.href = 'auth.html';
+}
+</script>
+<script>
+/* 🔒 защита страницы */
+if (!localStorage.getItem('isAuth')) {
+  location.href = 'auth.html';
+}
+
+/* 📦 загрузка подписок */
+let subscriptions = JSON.parse(localStorage.getItem('subs')) || [];
+
+/* ➕ добавление подписки */
+function addSub(name, price, day) {
+  if (!name || !price || !day) {
+    alert('Заполните все поля!');
+    return;
+  }
+
+  subscriptions.push({
+    name,
+    price: parseInt(price),
+    day: parseInt(day)
+  });
+
+  localStorage.setItem('subs', JSON.stringify(subscriptions));
+  renderSubs();
+}
+
+/* ✏️ редактирование */
+function editSub(index) {
+  const sub = subscriptions[index];
+  const name = prompt('Название подписки:', sub.name);
+  const price = prompt('Цена:', sub.price);
+  const day = prompt('День списания:', sub.day);
+
+  if (name && price && day) {
+    subscriptions[index] = {
+      name,
+      price: parseInt(price),
+      day: parseInt(day)
+    };
+    localStorage.setItem('subs', JSON.stringify(subscriptions));
+    renderSubs();
+  }
+}
+
+/* 🗑 удаление */
+function deleteSub(index) {
+  if (confirm('Удалить подписку?')) {
+    subscriptions.splice(index, 1);
+    localStorage.setItem('subs', JSON.stringify(subscriptions));
+    renderSubs();
+  }
+}
+
+/* 🔔 уведомления */
+if ('Notification' in window && Notification.permission === 'default') {
+  Notification.requestPermission();
+}
+
+function showNotification(title, body) {
+  if (Notification.permission === 'granted') {
+    new Notification(title, { body });
+  }
+}
+
+function checkReminders() {
+  const today = new Date().getDate();
+
+  subscriptions.forEach(sub => {
+    const diff = sub.day - today;
+
+    if (diff === 3) {
+      showNotification('Списание через 3 дня', `${sub.name} — ${sub.price} ₽`);
+    }
+    if (diff === 1) {
+      showNotification('Списание завтра', `${sub.name} — ${sub.price} ₽`);
+    }
+    if (diff === 0) {
+      showNotification('Сегодня списание', `${sub.name} — ${sub.price} ₽`);
+    }
+  });
+}
+
+/* 🍔 меню + запуск */
+document.addEventListener('DOMContentLoaded', () => {
+  const menuBtn = document.getElementById('menuBtn');
+  const sideMenu = document.getElementById('sideMenu');
+  const closeMenu = document.getElementById('closeMenu');
+
+  if (menuBtn && sideMenu) {
+    menuBtn.onclick = () => sideMenu.classList.toggle('open');
+  }
+
+  if (closeMenu) {
+    closeMenu.onclick = () => sideMenu.classList.remove('open');
+  }
+
+  renderSubs();
+  checkReminders();
+});
+</script>
+
+</body>
+</html>
 
 </body>
 </html>
