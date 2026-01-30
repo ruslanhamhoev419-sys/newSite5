@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <button class="back-btn" onclick="history.back()">← Назад</button>
+<meta charset="UTF-8">
+<title>Мои подписки</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Контейнер и блоки подписок — оставляем как есть */
+  .container { max-width:600px; margin:0 auto; padding:20px; }
+  h2 { margin-bottom:6px; }
+  p.info-text { margin-top:0; color:#ccc; }
+  hr { border:0; border-top:1px solid #444; margin:12px 0; }
+
+  .add-btn { display:block; text-align:center; background:#2ecc71; color:#000; font-weight:700; padding:12px; border-radius:12px; cursor:pointer; margin-top:20px; width:220px; }
+
+  .add-sub-form { display:none; margin-top:16px; padding:16px; background:#163049; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.4); }
+  .add-sub-form input { display:block; width:100%; margin-bottom:10px; padding:8px; border-radius:8px; border:none; }
+  .add-sub-form button { width:100%; }
+
+  .subscription-card { background:#1b2f45; padding:14px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.4); display:flex; justify-content:space-between; margin-bottom:12px; }
+  .sub-actions button { margin-left:8px; }
+
+  /* MENU */
+  .menu-btn { position:fixed; top:20px; right:20px; font-size:28px; cursor:pointer; z-index:100; }
+  .side-menu { position:fixed; top:0; right:-250px; width:250px; height:100%; background:#14263b; box-shadow:-4px 0 12px rgba(0,0,0,0.5); transition:0.3s; padding:20px; display:flex; flex-direction:column; gap:16px; z-index:99; }
+  .side-menu.open { right:0; }
+  .side-menu a { color:#fff; text-decoration:none; font-weight:600; padding:8px 0; }
+  .side-menu .close-menu { align-self:flex-end; cursor:pointer; font-size:24px; margin-bottom:20px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-row">
+
+<!--кнопка меню-->
+<div id="menuBtn">☰<div\>
+<div id="sideMenu" class="side-menu">
+<div id="closeMenu" class="menu-close">✕<div\>
+  <a href="index.html">Главная</a>
+  <a href="dashboard.html">Мои подписки</a>
+  <a href="reminders.html">Напоминания</a>
+  <a href="premium.html" class="active">Premium</a>
+  </div>
+</header>
+</div>
+</header>
+
+
+
+  
+
+<main class="container">
+  <section>
+    <h2>Мои подписки</h2>
+    <hr>
+    <p class="info-text">Здесь вы можете добавить свои подписки и следить за расходами</p>
+    <hr>
+  </section>
+
+  <section id="subscriptions-container"></section>
+
+  <div class="add-btn" id="showAddFormBtn">+ Добавить подписку</div>
+
+  <section class="add-sub-form" id="addForm">
+    <input type="text" id="subName" placeholder="Название подписки">
+    <input type="number" id="subPrice" placeholder="Цена">
+    <input type="number" id="subDay" placeholder="День списания">
+    <button class="btn btn-primary large" onclick="addSubscription()">Сохранить</button>
+  </section>
+
+</main>
+
+<script>
+let subscriptions = JSON.parse(localStorage.getItem('subs')) || [];
+
+function renderSubs() {
+  const container = document.getElementById('subscriptions-container');
+  container.innerHTML = '';
+  subscriptions.forEach((sub,index)=>{
+    const div = document.createElement('div');
+    div.className = 'subscription-card';
+    div.innerHTML = `
+      <div>
+        <strong>${sub.name}</strong><br>
+        <span class="sub-day">Списывается ${sub.day}-го</span>
+      </div>
+      <div class="sub-actions">
+        <span>${sub.price} ₽</span>
+        <button onclick="editSub(${index})">Изменить</button>
+        <button onclick="deleteSub(${index})">Удалить</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// Показать форму добавления подписки
+document.getElementById('showAddFormBtn').onclick = function() {
+  document.getElementById('addForm').style.display = 'block';
+  this.style.display = 'none';
+};
+
+// Добавление подписки
+function addSubscription() {
+  const name = document.getElementById('subName').value.trim();
+  const price = parseInt(document.getElementById('subPrice').value);
+  const day = parseInt(document.getElementById('subDay').value);
+
+  if(!name || !price || !day) {
+    alert('Заполните все поля!');
+    return;
+  }
+
+  subscriptions.push({name, price, day});
+  localStorage.setItem('subs', JSON.
+  stringify(subscriptions));
+
+  document.getElementById('addForm').style.display = 'none';
+  document.getElementById('showAddFormBtn').style.display = 'block';
+
+  document.getElementById('subName').value = '';
+  document.getElementById('subPrice').value = '';
+  document.getElementById('subDay').value = '';
+
+  renderSubs();
+}
+
+function editSub(index){
+  const sub = subscriptions[index];
+  const name = prompt('Название подписки:', sub.name);
+  const price = prompt('Цена:', sub.price);
+  const day = prompt('День списания:', sub.day);
+
+  if(name && price && day){
+    subscriptions[index] = {name, price: parseInt(price), day: parseInt(day)};
+    localStorage.setItem('subs', JSON.stringify(subscriptions));
+    renderSubs();
+  }
+}
+
+function deleteSub(index){
+  if(confirm('Удалить подписку?')){
+    subscriptions.splice(index,1);
+    localStorage.setItem('subs', JSON.stringify(subscriptions));
+    renderSubs();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const menuBtn = document.getElementById('menuBtn');
+  const sideMenu = document.getElementById('sideMenu');
+  const closeMenu = document.getElementById('closeMenu');
+
+  if(menuBtn && sideMenu){
+    menuBtn.onclick = () => sideMenu.classList.toggle('open');
+  }
+
+  if(closeMenu){
+    closeMenu.onclick = () => sideMenu.classList.remove('open');
+  }
+});
+
+renderSubs();
+</script>
+</body>
+</html>
+<script src="script.js"></script>
+<script>
+if ("Notification" in window && Notification.permission === "default") {
+  Notification.requestPermission().then(permission => {
+    console.log("Разрешение на уведомления:", permission);
+  });
+}
+</script>
+  

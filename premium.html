@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Premium — антиХаос подписок</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button class="back-btn" onclick="history.back()">← Назад</button>
+<header class="site-header">
+  <div class="container header-row">
+    <div class="logo">анти<span>Хаос</span> <span class="muted">подписок</span></div>
+
+    <!--кнопка меню-->
+<div id="menuBtn">☰<div\>
+</div>
+</header>
+
+<main class="container premium-page">
+
+  <!-- HERO -->
+  <section class="premium-hero card shadow">
+    <h1>Вы платите за то, чем не пользуетесь</h1>
+    <p class="lead">
+      Premium антиХаос показывает скрытые подписки, предупреждает о списаниях
+      и помогает экономить каждый месяц.
+    </p>
+
+    <div class="premium-price">
+      <span class="price">199 ₽</span>
+      <span class="period">в месяц</span>
+    </div>
+
+    <button class="btn btn-primary large" onclick="location.href='pay.html'">
+      Подключить Premium
+    </button>
+  </section>
+
+  <!-- FEATURES GRID -->
+  <section class="premium-features">
+
+    <div class="feature card shadow">
+      <div class="f-icon">🚫</div>
+      <h4>Без ограничений</h4>
+      <p>Добавляйте неограниченное количество подписок.</p>
+    </div>
+
+    <div class="feature card shadow">
+      <div class="f-icon">🔔</div>
+      <h4>Умные напоминания</h4>
+      <p>До списания, в день списания и после — вы всегда знаете, за что платите.</p>
+    </div>
+
+    <div class="feature card shadow">
+      <div class="f-icon">📬</div>
+      <h4>Telegram + Email</h4>
+      <p>Получайте уведомления там, где вам удобно.</p>
+    </div>
+
+    <div class="feature card shadow">
+      <div class="f-icon">📊</div>
+      <h4>Отчёты и аналитика</h4>
+      <p>Месячные отчёты, рост расходов и история списаний.</p>
+    </div>
+
+  </section>
+
+  <!-- COMPARISON -->
+  <section class="premium-compare card shadow">
+    <h3>Сравнение тарифов</h3>
+
+    <div class="compare-grid">
+      <div class="compare-col">
+        <h4>Бесплатно</h4>
+        <ul>
+          <li>До 5 подписок</li>
+          <li>Базовые напоминания</li>
+          <li>Без аналитики</li>
+        </ul>
+      </div>
+
+      <div class="compare-col premium">
+        <h4>Premium</h4>
+        <ul>
+          <li>Без ограничений</li>
+          <li>Умные напоминания</li>
+          <li>Telegram + Email</li>
+          <li>Отчёты PDF / Excel</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!--кнопка меню-->
+<div id="menuBtn">☰<div\>
+<div id="sideMenu" class="side-menu">
+<div id="closeMenu" class="menu-close">✕<div\>
+  <a href="index.html">Главная</a>
+  <a href="dashboard.html">Мои подписки</a>
+  <a href="reminders.html">Напоминания</a>
+  <a href="premium.html" class="active">Premium</a>
+  </div>
+</header>
+</div>
+</header>
+
+<script>
+const menuBtn = document.getElementById('menuBtn');
+const sideMenu = document.getElementById('sideMenu');
+const closeMenu = document.getElementById('closeMenu');
+
+menuBtn.onclick = () => sideMenu.classList.add('open');
+closeMenu.onclick = () => sideMenu.classList.remove('open');
+</script>
+
+</body>
+</html>

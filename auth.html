@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Регистрация — антиХаос подписок</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- кнопка назад -->
+<button class="back-btn" onclick="history.back()">← Назад</button>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container header-row">
+    <!-- меню слева -->
+    <div id="menuBtn" class="menu-btn">☰</div>
+
+    <!-- логотип -->
+    <div class="logo">
+      анти<span>Хаос</span> <span class="muted">подписок</span>
+    </div>
+  </div>
+</header>
+
+<!-- ОСНОВНОЙ КОНТЕНТ -->
+<main class="container auth-page">
+
+  <div class="auth-card card shadow">
+    <h1>Добро пожаловать</h1>
+
+    <p class="lead">
+      Создайте аккаунт и начните контролировать все свои подписки
+      в одном месте. Быстро, бесплатно и без лишнего.
+    </p>
+
+    <input id="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Пароль">
+
+    <button class="btn btn-primary large" onclick="register()">
+      Начать пользоваться
+    </button>
+
+    <p class="auth-note">
+      Регистрируясь, вы соглашаетесь с условиями сервиса
+    </p>
+  </div>
+
+</main>
+
+<!-- БОКОВОЕ МЕНЮ -->
+<div id="sideMenu" class="side-menu">
+  <div id="closeMenu" class="menu-close">✕</div>
+  <a href="index.html">Главная</a>
+  <a href="dashboard.html">Мои подписки</a>
+  <a href="reminders.html">Напоминания</a>
+  <a href="premium.html">Premium</a>
+</div>
+
+<!-- JS -->
+<script>
+function register(){
+  const email = document.getElementById('email').value;
+  if(!email){
+    alert('Введите email');
+    return;
+  }
+
+  localStorage.setItem('isAuth','true');
+  localStorage.setItem('userEmail', email);
+  location.href = 'dashboard.html';
+}
+
+// меню
+const menuBtn = document.getElementById('menuBtn');
+const sideMenu = document.getElementById('sideMenu');
+const closeMenu = document.getElementById('closeMenu');
+
+menuBtn.onclick = () => sideMenu.classList.add('open');
+closeMenu.onclick = () => sideMenu.classList.remove('open');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Напоминания — антиХаос подписок</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button class="back-btn" onclick="history.back()">← Назад</button>
+<header class="site-header">
+  <div class="container header-row">
+    <div class="logo">анти<span>Хаос</span> <span class="muted">подписок</span></div>
+    <div id="menuBtn" class="menu-btn">☰</div>
+  </div>
+</header>
+
+<main class="container reminders-page">
+
+  <!-- HERO -->
+  <section class="reminders-hero card shadow">
+    <h1>Напоминания о списаниях</h1>
+    <p class="lead">
+      Мы предупреждаем заранее, чтобы вы не платили за забытые подписки.
+      Полный контроль над каждым списанием.
+    </p>
+  </section>
+
+  <!-- REMINDERS LIST -->
+  <section class="reminders-list">
+
+    <!-- если нет подписок -->
+    <div id="emptyState" class="card shadow muted-center">
+      <h3>Пока нет напоминаний</h3>
+      <p>Добавьте подписку — и мы напомним о следующем списании.</p>
+      <a href="dashboard.html" class="btn btn-primary">Перейти к подпискам</a>
+    </div>
+
+    <!-- напоминания (JS будет подставлять) -->
+    <div id="reminders"></div>
+
+  </section>
+
+</main>
+<!--кнопка меню-->
+<div id="menuBtn">☰<div\>
+</div>
+</header>
+<!-- SIDE MENU -->
+<div id="sideMenu" class="side-menu">
+  <div id="closeMenu" class="menu-close">✕<div\>
+  <a href="index.html">Главная</a>
+  <a href="dashboard.html">Мои подписки</a>
+  <a href="reminders.html" class="active">Напоминания</a>
+  <a href="premium.html">Premium</a>
+</div>
+
+<script>
+const menuBtn = document.getElementById('menuBtn');
+const sideMenu = document.getElementById('sideMenu');
+const closeMenu = document.getElementById('closeMenu');
+
+menuBtn.onclick = () => sideMenu.classList.add('open');
+closeMenu.onclick = () => sideMenu.classList.remove('open');
+
+// DEMO / REAL DATA
+const subs = JSON.parse(localStorage.getItem('subs')) || [];
+const list = document.getElementById('reminders');
+const empty = document.getElementById('emptyState');
+
+if(subs.length){
+  empty.style.display = 'none';
+  subs.forEach(s=>{
+    const el = document.createElement('div');
+    el.className = 'reminder-card card shadow';
+    el.innerHTML = `
+      <div class="reminder-left">
+        <strong>${s.name}</strong>
+        <div class="sub-day">Списание ${s.day}-го числа</div>
+      </div>
+      <div class="reminder-right">
+        <span class="price">${s.price} ₽</span>
+        <span class="badge">🔔 скоро</span>
+      </div>
+    `;
+    list.appendChild(el);
+  });
+}
+</script>
+
+</body>
+</html>
